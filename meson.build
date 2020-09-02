@@ -4,12 +4,15 @@ project('sdl2_ttf', 'c',
     subproject_dir : 'external',
     default_options : ['c_std=gnu99'])
 
-freetype_dep = subproject('freetype2', required: true)
+cc = meson.get_compiler('c')
+
+m_dep = cc.find_library('m', required : false)
+freetype_dep = subproject('freetype2', required : true)
 sdl2_dep = dependency('sdl2', fallback : ['sdl2', 'sdl2_dep'], required: true)
 
 sdl2_ttf = library('sdl2_ttf',
     files('SDL_ttf.c'),
-    dependencies : [freetype_dep.get_variable('freetype_dep'), sdl2_dep],
+    dependencies : [freetype_dep.get_variable('freetype_dep'), m_dep, sdl2_dep],
     include_directories : '.')
 
 sdl2_ttf_dep = declare_dependency(
